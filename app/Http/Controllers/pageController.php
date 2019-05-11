@@ -134,4 +134,154 @@ class pageController extends Controller
             DB::table('user')->where('username',$username)->select('password')->update(['password'=>$req->password]);
         return redirect()->back()->with('update_success1','Update successfull!');
     }   
+       public function getIndex(){
+        $sumofjobs = Job::all();
+        $alljobs = Job::paginate(4);
+        $types = TypeOfJob::all();
+        $alluser = User::all();
+        $category = Category::all();
+        $location = Location::all();
+        $allapply = Apply::all();
+        if(count($types)%4==0) $var=count($types)/4;
+        else $var = floor(count($types)/4)+1;
+        return view('page.trangchu',compact('var','alljobs','types','category','location','alluser','allapply','sumofjobs'));
+    }
+
+    public function getTypeOfJob($type){
+        $type_of_job = Job::where('idType',$type)->paginate(4);
+        $sumofjobs = Job::all();
+        $types = TypeOfJob::all();
+        $alluser = User::all();
+        $category = Category::all();
+        $location = Location::all();
+        $allapply = Apply::all();
+        if(count($types)%4==0) $var=count($types)/4;
+        else $var = floor(count($types)/4)+1;
+        return view('page.typeofjob',compact('var','type_of_job','types','category','location','sumofjobs','alluser','allapply'));
+    }
+
+    public function showJob($id)
+    {
+        $user_name = Session('user');
+        $sumofjobs = Job::all();
+        $alluser = User::all();
+        $category = Category::all();
+        $location = Location::all();
+        $allapply = Apply::all();
+        $types = TypeOfJob::all();
+        $job = Job::find($id); 
+        $exist = DB::table('apply')
+            ->join('job', 'apply.idJob', '=', 'job.Id')
+            ->when($id, function ($query) use ($id) {
+                    return $query->where('apply.idJob', $id);
+                })
+            ->when($user_name, function ($query) use ($user_name) {
+                    return $query->where('apply.username', $user_name);
+                })
+            ->first();  
+        if ($exist == null) {
+            $result = 'not exist';          
+        } else {
+             $result = 'exist';
+        }     
+
+        return view('page.jobdetail', compact('job', 'result','types','sumofjobs','category','location','allapply','alluser'));
+    }
+
+    public function store(Request $request, $id){
+        $apply = new Apply;
+        $apply->idJob = $id;
+        $apply->username = Session('user');
+        $apply->save();
+
+        return redirect()->back()->with('thongbao1','Nộp đơn thành công!');
+        
+    }
+
+    public function searchjob(Request $request){
+        $cat = $request->catname;
+        $searchlocation = $request->searchlocation;
+        $jobname = $request->input('jobname');
+        $types = TypeOfJob::all();
+        $category = Category::all();
+        $location = Location::all();
+        $sumofjobs = Job::all();
+        $allapply = Apply::all();
+        $alluser = User::all();
+        if(count($types)%4==0) $var=count($types)/4;
+        else $var = floor(count($types)/4)+1;
+
+
+        if($request->has('jobname')){
+            if ($cat == 'novalue'){
+                if ($searchlocation == 'novalue'){
+                    $jobs = Job::where(function ($query) use ($jobname){
+                        $query->where('title', 'like', '%'.$jobname.'%')
+                        ->orWhere('description', 'like', '%'.$jobname.'%');
+                         })->orderBy('deadline','desc')
+                        ->get();
+                    }
+                else
+                {
+                    $jobs = Job::where('location','like','%'.$searchlocation.'%')
+                        ->where(function ($query) use ($jobname){
+                        $query->where('title', 'like', '%'.$jobname.'%')
+                        ->orWhere('description', 'like', '%'.$jobname.'%');
+                         })->orderBy('deadline','desc')
+                        ->get();
+                }
+
+            }
+            else {
+                if ($searchlocation == 'novalue'){
+                    $jobs = Job::where('idCategory',$cat)
+                        ->where(function ($query) use ($jobname){
+                        $query->where('title', 'like', '%'.$jobname.'%')
+                        ->orWhere('description', 'like', '%'.$jobname.'%');
+                         })->orderBy('deadline','desc')
+                        ->get();
+                }
+                else{
+                    $jobs = Job::where('location','like','%'.$searchlocation.'%')
+                        ->where('idCategory',$cat)
+                        ->where(function ($query) use ($jobname){
+                        $query->where('title', 'like', '%'.$jobname.'%')
+                        ->orWhere('description', 'like', '%'.$jobname.'%');
+                         })->orderBy('deadline','desc')
+                        ->get();
+                }
+
+            }
+        }
+
+         
+         else{
+            if ($cat = 'novalue'){
+                if ($searchlocation == 'novalue')
+                    $jobs = Job::all();
+                else{
+                    $jobs = Job::where('location','like','%'.$searchlocation.'%')
+                            ->orderBy('deadline','desc')
+                            ->get();
+                }
+
+            }
+            else {
+                if ($searchlocation == 'novalue'){
+                    $jobs = Job::where('idCategory',$cat)
+                            ->orderBy('deadline','desc')
+                            ->get();
+                }
+                else{
+                    $jobs = Job::where('location','like','%'.$searchlocation.'%')
+                        ->where('idCategory',$cat)
+                        ->orderBy('deadline','desc')
+                        ->get();
+                }
+
+
+        }
+    }    
+        return view('page.search',compact('var','jobs','types','category','location','sumofjobs','alluser','allapply'));
+}
 }
