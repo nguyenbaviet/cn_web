@@ -11,13 +11,14 @@ class User extends Authenticatable
     use Notifiable;
     public $table='user';
     public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','username',
+        'name', 'email', 'password',
     ];
 
     /**
@@ -37,4 +38,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function apply(){
+        return $this->hasMany('App\Apply','username','username');
+    }
+    public function job(){
+        return $this->hasMany('App\Job','idUser','username');
+    }
+    public function skill(){
+        return $this->hasOne('App\Skill','username','username');
+    }
 }

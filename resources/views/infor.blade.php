@@ -1,28 +1,31 @@
 <style type="text/css">
-	.input{
-		width:250px;
-	}
-	table{
-		margin-left: 300px;
-	}
-	tr{
-		margin-top: 20px;
-	}
-	input[type="submit"]{
-		margin-left: 300px;
-		margin-top: 20px;
-		width: 50px
-	}
+  .input{
+    width:250px;
+  }
+  table{
+    margin-left: 300px;
+  }
+  tr{
+    margin-top: 20px;
+  }
+  input[type="submit"]{
+    margin-left: 300px;
+    margin-top: 20px;
+    width: 50px
+  }
   .alert.alert-success{
     margin-left: 300px;
     margin-bottom: 20px;
     font-size: 20px;
   }
-	input[type="button"]{
-		margin-left: 250px;
-	}
+  input[type="button"]{
+    margin-left: 250px;
+  }
 </style>
+<div>
+<div style="float: left, margin-right: 100px"><a href="{{route('trangchu')}}">Trang chủ</a></div>
 <div style="text-align:center"><h1>Your Information</h1></div>
+</div>
 <div>
     <p style="margin-left: 250px">
       <label>
@@ -48,7 +51,7 @@
           </script>
         @endif         
   <div id='div_1'>
-  	<table width="auto">
+    <table width="auto">
     <tr>
       <td>Name</td>
       <td><input type="text" name="name" id="name" class="input" value="{{$result->name}}" /></td>
@@ -95,7 +98,7 @@
         <td>Company</td>
         <td><input type="text" name="company" id="company" class="input" value="{{$result->company}}" /></td>
       </tr>
-    @else
+    @elseif(Session('type')==2)
       <tr>
       <td>Experience</td>
       <td><textarea name="experience" id="Experience" class="input"/>{{$result->experience}}</textarea></td>
@@ -135,7 +138,7 @@
           </script>
         @endif    -->    
   <div id ="div_2">
-  	<table width="auto" >
+    <table width="auto" >
     <tr>
       <td>Username</td>
       <td><input type="text" name="username" id="username" readonly="readonly" value="{{$result->username}}" /></td>
@@ -156,8 +159,8 @@
   </div>
 </form>
 <script type="text/javascript">
-	var x = document.getElementsByName('rdoInfor');
-	if(x[0].checked==true){
+  var x = document.getElementsByName('rdoInfor');
+  if(x[0].checked==true){
         document.getElementById('div_2').style.display='none';
         document.getElementById('div_1').style.display='block';
         } else {

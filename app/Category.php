@@ -8,4 +8,7 @@ class Category extends Model
 {
     public $table = 'category';
     public $timestamps = false;
+    public function job(){
+    	return $this->hasMany('App\Job','idCategory','Id');
+    }
 }
