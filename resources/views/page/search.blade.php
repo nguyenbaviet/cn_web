@@ -109,8 +109,11 @@
 
                 <button class="collapsible" style="background-color: #78d5ef; background-image: linear-gradient(to bottom, #2A95C5, #21759B);box-shadow: 0 1px 0 rgba(120, 200, 230, 0.5) inset;border-color: #21759B #21759B #1E6A8D #21759B; border-style: solid; border-width: 1px; border-radius: 3px 3px 3px 3px; display: inline-block; padding: 2px 5px 3px 5px; margin: 1px 3px; color: #FFFFFF; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1); text-decoration: none; cursor: pointer; white-space: nowrap;">Ẩn/Hiện thông tin</button>
               <div class="content" style="display: none; overflow: hidden;">
-                <p>{!! $job->description !!}</p>
-              </div>
+                <b>Description</b></br>
+                <p>{!! $job->description !!}</p></br>
+                <b>Requirement</b></br>
+                <p>{!! $job->requirement !!}</p></br>
+                </div>
             </div>
 
               <div class="ml-auto d-flex">
