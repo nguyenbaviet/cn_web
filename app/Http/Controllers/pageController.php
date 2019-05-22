@@ -200,6 +200,8 @@ public function postData(Request $req){
         $allapply = Apply::all();
         $types = TypeOfJob::all();
         $job = Job::find($id); 
+        if(count($types)%4==0) $var=count($types)/4;
+        else $var = floor(count($types)/4)+1;
         $exist = DB::table('apply')
             ->join('job', 'apply.idJob', '=', 'job.Id')
             ->when($id, function ($query) use ($id) {
