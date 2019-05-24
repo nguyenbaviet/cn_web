@@ -22,7 +22,7 @@
 				@endphp
 
 					
-					<li class="nav-item cta cta-mr-md-3"><a class="nav-link" href="company/comIndex/{{Session('user')}}">Trang quản lý</a></li>
+					<li class="nav-item cta cta-mr-md-1"><a class="nav-link" href="company/comIndex/{{Session('user')}}">Trang quản lý</a></li>&ensp;
 				@php
 					}
 				@endphp

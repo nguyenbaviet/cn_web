@@ -37,7 +37,7 @@
                                     <th>Giới tính</th>
                                     <th>Ngày sinh</th>
                                     <th>Email</th>
-                                    <th>Money</th>
+                                    
                                     <th>Chức năng</th>
                                   </tr>
                                 </thead>
@@ -45,7 +45,7 @@
                                   <?php 
                                     include 'database.php';
                                     $conn = Database::connect();
-                                    $sql = "SELECT * FROM user";
+                                    $sql = "SELECT * FROM user where(type <> 0)";
                                     $results = mysqli_query($conn, $sql);
                                     if ($results->num_rows > 0) {
                                         // output data of each row
@@ -56,7 +56,7 @@
                                             echo '<td>'. $row['gender'] . '</td>';
                                             echo '<td>'. $row['DOB'] . '</td>';
                                             echo '<td>'. $row['mail'] .'</td>';
-                                            echo '<td>'. $row['money'] . '</td>';
+                                           
                                             echo '<td width=250>';
                                             echo '<a class="btn btn-success" href="user-detail.php?username='.$row['username'].'">Chi tiết</a>';
                                             echo '&nbsp;';

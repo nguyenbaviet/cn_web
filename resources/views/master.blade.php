@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="source/css/flaticon.css">
     <link rel="stylesheet" href="source/css/icomoon.css">
     <link rel="stylesheet" href="source/css/style.css">
+
   </head>
   <body>
     
@@ -120,6 +121,8 @@
   <script src="source/https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="source/js/google-map.js"></script>
   <script src="source/js/main.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script> 
     
   </body>
 </html>

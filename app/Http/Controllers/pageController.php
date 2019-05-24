@@ -13,6 +13,7 @@ use App\Apply;
 use App\Category;
 use App\Location;
 use App\mail;
+use App\Skill;
 
 
 class pageController extends Controller
@@ -217,7 +218,7 @@ public function postData(Request $req){
              $result = 'exist';
         }     
 
-        return view('page.jobdetail', compact('job', 'result','types','sumofjobs','category','location','allapply','alluser'));
+        return view('page.jobdetail', compact('var','job', 'result','types','sumofjobs','category','location','allapply','alluser'));
     }
 
     public function store(Request $request, $id){
@@ -343,9 +344,24 @@ public function postData(Request $req){
                $mail = DB::table('mail')->where('From_user',$username)->get();
         return view('company/ibox/hopThuDi',['mail'=>$mail]); 
     }
-    public function autocomplete(Request $req){
-        $data = User::select("username")->where("name","LIKE","%($req->to)%")->get();
-        return respose()->json($data);
+    public function getSearchAjax(Request $request)
+    {
+        if($request->get('query'))
+        {
+            $query = $request->get('query');
+            $data = DB::table('job')
+            ->where('title', 'LIKE', "%{$query}%")
+            ->get();
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+            foreach($data as $row)
+            {
+               $output .= '
+               <li><a href="chi-tiet-viec/'. $row->Id .'">'.$row->title.'</a></li>
+               ';
+           }
+           $output .= '</ul>';
+           echo $output;
+       }
     }
 
 }

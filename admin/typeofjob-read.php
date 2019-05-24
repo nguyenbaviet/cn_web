@@ -15,7 +15,7 @@
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li><a class="btn btn-primary" href="typeofjob-create.php">Tạo danh mục thời gian</a></li>
+                            <li><a class="btn btn-primary" href="typeofjob-create.php">Tạo danh mục </a></li>
                             
                         </ol>
                     </div>

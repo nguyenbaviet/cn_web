@@ -30,8 +30,42 @@
                             <div class="form-group">
                               <div class="form-field">
                                 <div class="icon"><span class="icon-briefcase"></span></div>
-                                <input type="text" class="form-control" name="jobname" placeholder="eg. Thiết kế đồ họa">
+                                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>                    
+                                <input type="text" class="typeahead form-control" id="jobname" name="jobname" placeholder="eg. Thiết kế đồ họa" autocomplete="off">
+                         
+                                <div id="countryList"><br>
                               </div>
+                              </div>
+                      {{ csrf_field() }}
+
+                        <script>
+  $(document).ready(function(){
+
+   $('#jobname').keyup(function(){ //bắt sự kiện keyup khi người dùng gõ từ khóa tim kiếm
+    var query = $(this).val(); //lấy gía trị ng dùng gõ
+    if(query != '') //kiểm tra khác rỗng thì thực hiện đoạn lệnh bên dưới
+    {
+     var _token = $('input[name="_token"]').val(); // token để mã hóa dữ liệu
+     $.ajax({
+      url:"{{ route('search') }}", // đường dẫn khi gửi dữ liệu đi 'search' là tên route mình đặt bạn mở route lên xem là hiểu nó là cái j.
+      method:"POST", // phương thức gửi dữ liệu.
+      data:{query:query, _token:_token},
+      success:function(data){ //dữ liệu nhận về
+       $('#countryList').fadeIn();  
+       $('#countryList').html(data); //nhận dữ liệu dạng html và gán vào cặp thẻ có id là countryList
+     }
+   });
+   }
+ });
+
+   $(document).on('click', 'li', function(){  
+    $('#jobname').val($(this).text());  
+    $('#countryList').fadeOut();  
+  });  
+
+ });
+</script>
                             </div>
                           </div>
                           <div class="col-md">
@@ -105,23 +139,21 @@
                 </div>
                 <div class="job-post-item-body d-block d-md-flex">
                   <div class="mr-3"><span class="icon-layers"></span>Deadline: {{$job->deadline}}</div>
+                  <?php $type= DB::table('category')->where('Id',$job->idCategory)->get(); ?>
+                  @foreach($type as $type)
+                  <div class="mr-3"><span class="icon-my_location"></span> <span>Type: {{$type->Name}}</span></div>
+                  <div class="mr-3"><span class="icon-layers">Location:{{$job->location}}</span></div>
+                  @endforeach                  
                 </div>
 
-                <button class="collapsible" style="background-color: #78d5ef; background-image: linear-gradient(to bottom, #2A95C5, #21759B);box-shadow: 0 1px 0 rgba(120, 200, 230, 0.5) inset;border-color: #21759B #21759B #1E6A8D #21759B; border-style: solid; border-width: 1px; border-radius: 3px 3px 3px 3px; display: inline-block; padding: 2px 5px 3px 5px; margin: 1px 3px; color: #FFFFFF; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1); text-decoration: none; cursor: pointer; white-space: nowrap;">Ẩn/Hiện thông tin</button>
-              <div class="content" style="display: none; overflow: hidden;">
-                <b>Description</b></br>
-                <p>{!! $job->description !!}</p></br>
-                <b>Requirement</b></br>
-                <p>{!! $job->requirement !!}</p></br>
- 
-              </div>
+
             </div>
 
               <div class="ml-auto d-flex">
-                @if(Session::has('user'))
-                <a href="{{route('chitietviec',$job->Id)}}" class="btn btn-primary py-2 mr-1">Liên hệ</a>
+               
+                <a href="{{route('chitietviec',$job->Id)}}" class="btn btn-primary py-2 mr-1">Chi tiết</a>
 
-                @endif
+               
 <!--                 <a href="#" class="btn btn-secondary rounded-circle btn-favorite d-flex align-items-center icon">
                   <span class="icon-heart"></span>
                 </a> -->

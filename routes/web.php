@@ -97,6 +97,8 @@ Route::get('search-job',[
 	'as'=>'searchjob',
 	'uses' => 'pageController@searchjob'
 ]);
+
+Route::post('search/name', 'pageController@getSearchAjax')->name('search');
 Route::get('sendmail','pageController@getMail');
 Route::post('sendmail','pageController@postmail');
-Route::get('autocomplete','pageController@autocomplete');
+

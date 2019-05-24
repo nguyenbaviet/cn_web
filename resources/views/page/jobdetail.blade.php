@@ -30,8 +30,42 @@
                             <div class="form-group">
                               <div class="form-field">
                                 <div class="icon"><span class="icon-briefcase"></span></div>
-                                <input type="text" class="form-control" name="jobname" placeholder="eg. Thiết kế đồ họa">
+                                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>                    
+                                <input type="text" class="typeahead form-control" id="jobname" name="jobname" placeholder="eg. Thiết kế đồ họa" autocomplete="off">
+                         
+                                <div id="countryList"><br>
                               </div>
+                              </div>
+                      {{ csrf_field() }}
+
+                        <script>
+  $(document).ready(function(){
+
+   $('#jobname').keyup(function(){ //bắt sự kiện keyup khi người dùng gõ từ khóa tim kiếm
+    var query = $(this).val(); //lấy gía trị ng dùng gõ
+    if(query != '') //kiểm tra khác rỗng thì thực hiện đoạn lệnh bên dưới
+    {
+     var _token = $('input[name="_token"]').val(); // token để mã hóa dữ liệu
+     $.ajax({
+      url:"{{ route('search') }}", // đường dẫn khi gửi dữ liệu đi 'search' là tên route mình đặt bạn mở route lên xem là hiểu nó là cái j.
+      method:"POST", // phương thức gửi dữ liệu.
+      data:{query:query, _token:_token},
+      success:function(data){ //dữ liệu nhận về
+       $('#countryList').fadeIn();  
+       $('#countryList').html(data); //nhận dữ liệu dạng html và gán vào cặp thẻ có id là countryList
+     }
+   });
+   }
+ });
+
+   $(document).on('click', 'li', function(){  
+    $('#jobname').val($(this).text());  
+    $('#countryList').fadeOut();  
+  });  
+
+ });
+</script>
                             </div>
                           </div>
                           <div class="col-md">
@@ -129,6 +163,7 @@
                       </span>
                       {{$job->deadline}}
                     </li>
+          @if(Session::has('user'))
           @php
           $user= Session('user');
           $type= DB::table('user')->where('username',$user)->first();
@@ -151,7 +186,7 @@
                     @endphp
                   </br>
                     <a href="sendmail"><button class="nav-item cta cta-mr-md-3">Gửi Email</button></a>
-                    
+                   @endif 
                   </ul>
                      </div>
                    </div>
@@ -211,38 +246,23 @@
           </div>
         </div>
         <div class="row">
+          @for($j=0;$j<=2;$j++)
           <div class="col-md-3 ftco-animate">
             <ul class="category">
-              <li><a href="{{route('loaiviec',$types[0]->Id)}}">{{$types[0]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[1]->Id)}}">{{$types[1]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[2]->Id)}}">{{$types[2]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[3]->Id)}}">{{$types[3]->Name}}</a></li>
+              @for($i=0;$i<$var;$i++)
+              <li><a href="{{route('loaiviec',$types[$var*$j+$i]->Id)}}">{{$types[$var*$j+$i]->Name}}</a></li>
+              @endfor
             </ul>
         </div>
+        @endfor
         <div class="col-md-3 ftco-animate">
             <ul class="category">
-              <li><a href="{{route('loaiviec',$types[4]->Id)}}">{{$types[4]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[5]->Id)}}">{{$types[5]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[6]->Id)}}">{{$types[6]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[7]->Id)}}">{{$types[7]->Name}}</a></li>
+              @for($i=3*$var;$i<=count($types)-1;$i++)
+              <li><a href="{{route('loaiviec',$types[$i]->Id)}}">{{$types[$i]->Name}}</a></li>
+            @endfor
             </ul>
         </div>
-        <div class="col-md-3 ftco-animate">
-            <ul class="category">
-              <li><a href="{{route('loaiviec',$types[8]->Id)}}">{{$types[8]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[9]->Id)}}">{{$types[9]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[10]->Id)}}">{{$types[10]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[11]->Id)}}">{{$types[11]->Name}}</a></li>
-            </ul>
-        </div>
-        <div class="col-md-3 ftco-animate">
-            <ul class="category">
-              <li><a href="{{route('loaiviec',$types[12]->Id)}}">{{$types[12]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[13]->Id)}}">{{$types[13]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[14]->Id)}}">{{$types[14]->Name}}</a></li>
-              <li><a href="{{route('loaiviec',$types[15]->Id)}}">{{$types[15]->Name}}</a></li>  
-            </ul>
-        </div>
+
       </div>
     </section>
 
